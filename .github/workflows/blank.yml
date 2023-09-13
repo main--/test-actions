@@ -9,4 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run a one-line script
-        run: echo Hello  ${{ github.event.pull_request.head.label }} ${{ github.event.pull_request.head.ref }}
+        env:
+          BUILDKITE_APIKEY: ${{ secrets.BUILDKITE_APIKEY }}
+        run: curl -H "Authorization: Bearer $BUILDKITE_APIKEY" -X POST "https://api.buildkite.com/v2/organizations/datawisp/pipelines/devbuild-teardown/builds" -d '{"commit":"HEAD","branch":"main","env":{"teardown_branch":"${{ github.event.pull_request.head.ref }}"},"message":"Destroy ${{ github.event.pull_request.head.ref }}"}' -H 'Content-Type: application/json'
