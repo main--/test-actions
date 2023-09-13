@@ -11,4 +11,5 @@ jobs:
       - name: Run a one-line script
         env:
           BUILDKITE_APIKEY: ${{ secrets.BUILDKITE_APIKEY }}
-        run: curl -H "Authorization: Bearer $BUILDKITE_APIKEY" -X POST "https://api.buildkite.com/v2/organizations/datawisp/pipelines/devbuild-teardown/builds" -d '{"commit":"HEAD","branch":"main","env":{"teardown_branch":"${{ github.event.pull_request.head.ref }}"},"message":"Destroy ${{ github.event.pull_request.head.ref }}"}' -H 'Content-Type: application/json'
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: "curl -H \"Authorization: Bearer $BUILDKITE_APIKEY\" -X POST 'https://api.buildkite.com/v2/organizations/datawisp/pipelines/devbuild-teardown/builds' -d '{\"commit\":\"HEAD\",\"branch\":\"main\",\"env\":{\"teardown_branch\":\"'\"$PR_BRANCH\"'\"},\"message\":\"Destroy '\"$PR_BRANCH\"'\"}' -H 'Content-Type: application/json'"
